@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MedWholesale — Premium Medical Supply</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"/>
+  <script defer src="script.js"></script>
+</head>
+<body>
+
+  <div class="bg-animation">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
+
+  <header class="site-header glass-panel">
+    <div class="branding" id="brandingArea">
+      <div class="logo-wrapper">
+        <img id="logoImg" src="" alt="Logo" class="logo hidden">
+        <div class="logo-placeholder">💊</div>
+      </div>
+      <div class="brand-text">
+        <h1 id="storeName" class="editable-text">MedWholesale</h1>
+        <div class="gst-line">GSTIN: <span id="storeGstin">—</span></div>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="header-quick">
+        <div class="chips">
+          <span class="chip pulse"><i class="icon">🚚</i> Delivery</span>
+          <span class="chip"><i class="icon">📦</i> Pickup</span>
+          <span class="chip"><i class="icon">📄</i> GST Invoices</span>
+        </div>
+      </div>
+
+      <nav class="nav desktop">
+        <a href="#" data-section="home" class="nav-link active">Home</a>
+        <a href="#" data-section="products" class="nav-link">Products</a>
+        <a href="#" data-section="cart" class="nav-link">Cart <span id="cartCount" class="pill bounce">0</span></a>
+        <a href="#" data-section="adminPanel" class="nav-link admin-only hidden" id="adminNav">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- HOME SECTION -->
+    <section id="home" class="section fade-in-up">
+      <div class="home-hero glass-card">
+        <div class="hero-left">
+          <span class="badge-highlight editable-text" id="homeBadge">Wholesale Medical Supplies</span>
+          <h1 class="editable-text" id="homeTitle">Genuine Medicines,<br> <span class="text-gradient">GST Compliant</span></h1>
+          <p class="sub editable-text" id="homeSub">Order online for delivery or pickup. Get proper GST invoices tailored for your business.</p>
+
+          <form id="homeSearchForm" class="home-search">
+            <div class="input-group">
+              <input type="text" id="homeSearchInput" placeholder="Search medicines, surgicals..." />
+              <button class="btn primary" type="submit">Search</button>
+            </div>
+          </form>
+
+          <div class="hero-ctas">
+            <a href="#" class="btn primary glow" data-section="products">View Catalog</a>
+            <a href="#" class="btn secondary" data-section="cart">Check Cart</a>
+            <div class="contact-mini">Call: <span id="homePhone">—</span></div>
+          </div>
+
+          <div class="hero-stats">
+            <div class="stat">
+              <strong id="countItems">0</strong>
+              <span>Items</span>
+            </div>
+            <div class="stat">
+              <strong id="countCats">0</strong>
+              <span>Categories</span>
+            </div>
+            <div class="stat">
+              <strong id="countOrders">0</strong>
+              <span>Served</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <div class="hero-art-med">
+            <div class="float-item i1">💊</div>
+            <div class="float-item i2">🩺</div>
+            <div class="float-item i3">💉</div>
+            <div class="float-item i4">🏥</div>
+          </div>
+          <div class="compliance-badge glass-panel">GSTIN: <span id="homeGstin">—</span></div>
+        </div>
+      </div>
+
+      <div class="category-tiles glass-card">
+        <div class="tiles-head">
+          <h3 class="editable-text" id="catTitle">Shop by Category</h3>
+          <a href="#" class="link" data-section="products">View All →</a>
+        </div>
+        <div class="tiles" id="catTiles"></div>
+      </div>
+
+      <div class="benefits">
+        <div class="benefit glass-card hover-lift">
+          <div class="icon-box">📄</div>
+          <h3 class="editable-text" id="ben1T">GST Invoices</h3>
+          <p class="editable-text" id="ben1D">Compliant tax invoices with proper breakdown.</p>
+        </div>
+        <div class="benefit glass-card hover-lift">
+          <div class="icon-box">💰</div>
+          <h3 class="editable-text" id="ben2T">Bulk Pricing</h3>
+          <p class="editable-text" id="ben2D">Better rates for wholesale quantities.</p>
+        </div>
+        <div class="benefit glass-card hover-lift">
+          <div class="icon-box">✅</div>
+          <h3 class="editable-text" id="ben3T">Genuine Stock</h3>
+          <p class="editable-text" id="ben3D">Batch-tracked, pharma-grade products.</p>
+        </div>
+        <div class="benefit glass-card hover-lift">
+          <div class="icon-box">🚚</div>
+          <h3 class="editable-text" id="ben4T">Fast Delivery</h3>
+          <p class="editable-text" id="ben4D">Choose what suits your workflow.</p>
+        </div>
+      </div>
+
+      <div class="cta-banner glass-card gradient-bg">
+        <div class="cta-left">
+          <h3 class="editable-text" id="ctaTitle">Need a bulk quote?</h3>
+          <p class="editable-text" id="ctaDesc">Share your list — we’ll respond with best pricing.</p>
+        </div>
+        <div class="cta-actions">
+          <a href="#" class="btn white" data-section="products">Browse Catalog</a>
+          <a id="ctaCallBtn" href="#" class="btn trans">Call Now</a>
+        </div>
+      </div>
+
+      <div id="mapWrap" class="visit glass-card hidden">
+        <div class="visit-head">
+          <h3>Visit our Store</h3>
+          <div class="muted small"><span id="homeAddress">—</span></div>
+        </div>
+        <div class="map-embed">
+          <iframe id="mapFrame" src="" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRODUCTS SECTION -->
+    <section id="products" class="section hidden fade-in-up">
+      <div class="section-header">
+        <h2>Our Products</h2>
+      </div>
+      <div class="filters sticky glass-panel">
+        <div class="search-wrap">
+          <input type="text" id="searchInput" placeholder="Search products...">
+        </div>
+        <select id="categoryFilter">
+          <option value="">All Categories</option>
+        </select>
+        <div class="toolbar">
+          <select id="sortSelect">
+            <option value="">Sort: Featured</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="name-asc">Name: A–Z</option>
+            <option value="stock-desc">In Stock First</option>
+          </select>
+        </div>
+      </div>
+      <div id="productGrid" class="grid"></div>
+      <div id="noProducts" class="muted hidden empty-msg">No products found matching your search.</div>
+    </section>
+
+    <!-- CART SECTION -->
+    <section id="cart" class="section hidden fade-in-up">
+      <h2>Your Cart</h2>
+      <div class="cart-actions">
+        <button id="clearCartBtn" class="btn danger">Clear Cart</button>
+        <a href="#" class="btn secondary" data-section="products">Continue Shopping</a>
+      </div>
+      <div id="cartList"></div>
+      <div id="cartEmpty" class="muted empty-msg">Your cart is currently empty.</div>
+
+      <div id="checkoutBox" class="glass-card hidden">
+        <h3>Checkout Details</h3>
+        <form id="checkoutForm" class="form">
+          <div class="row">
+            <div class="field">
+              <label>Customer Name</label>
+              <input type="text" id="custName" required>
+            </div>
+            <div class="field">
+              <label>Phone Number</label>
+              <input type="tel" id="custPhone" placeholder="10-digit mobile number" required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label>Business Name (Optional)</label>
+              <input type="text" id="custBiz">
+            </div>
+            <div class="field">
+              <label>GSTIN (Optional)</label>
+              <input type="text" id="custGstin" placeholder="15-char GSTIN">
+            </div>
+          </div>
+          <div class="field">
+            <label>Order Type</label>
+            <div class="radio-row">
+              <label class="radio-card"><input type="radio" name="ordType" value="Pickup" checked> <span>🏪 Pickup</span></label>
+              <label class="radio-card"><input type="radio" name="ordType" value="Delivery"> <span>🚚 Delivery</span></label>
+            </div>
+          </div>
+          
+          <div id="deliveryFields" class="hidden slide-down">
+            <div class="row">
+              <div class="field">
+                <label>Address Line</label>
+                <input type="text" id="addrLine">
+              </div>
+              <div class="field">
+                <label>Area / Landmark</label>
+                <input type="text" id="addrArea">
+              </div>
+            </div>
+          </div>
+
+          <!-- Hidden Fields -->
+          <div class="hidden">
+             <input type="date" id="pickupDate">
+             <input type="time" id="pickupTime">
+             <input type="number" id="orderDiscount" value="0">
+             <input type="number" id="orderExtra" value="0">
+          </div>
+
+          <div class="field">
+            <label>Notes</label>
+            <textarea id="orderNotes" rows="2" placeholder="Any specific instructions?"></textarea>
+          </div>
+          <div class="summary">
+            <div id="taxSummary" class="muted"></div>
+            <div class="totals">
+              <div>Subtotal: <strong id="sumSub">₹0</strong></div>
+              <div>GST: <strong id="sumGst">₹0</strong></div>
+              <div id="shipRow" class="hidden">Shipping: <strong id="sumShip">₹0</strong></div>
+              <div class="grand">Total: <strong id="sumGrand">₹0</strong></div>
+            </div>
+          </div>
+          <button class="btn primary block pulse" type="submit">Place Order</button>
+        </form>
+      </div>
+
+      <div id="orderSuccess" class="success glass-panel hidden"></div>
+
+      <div id="custOrdersCard" class="glass-card">
+        <h3>Order History</h3>
+        <div class="muted small">Enter your phone to view past orders.</div>
+        <form id="custOrdersForm" class="form-inline styled-bar" style="margin:12px 0">
+          <input type="text" id="custOrdersPhone" placeholder="Enter 10-digit phone number">
+          <button class="btn secondary">Find Orders</button>
+        </form>
+        <div id="custOrdersList"></div>
+        <div id="custNoOrders" class="muted hidden">No orders found.</div>
+      </div>
+    </section>
+
+    <!-- ADMIN PANEL -->
+    <section id="adminPanel" class="section hidden fade-in-up">
+      <h2>Admin Dashboard</h2>
+      <div id="adminLoginBox" class="glass-card center-box">
+        <h3>Admin Login</h3>
+        <form id="adminLoginForm" class="form-inline styled-bar">
+          <input type="password" id="adminPinInput" placeholder="Enter PIN" required>
+          <button class="btn primary">Login</button>
+        </form>
+        <div id="adminLoginMsg" class="muted"></div>
+      </div>
+
+      <div id="adminArea" class="hidden">
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="ordersTab">Orders</button>
+          <button class="tab-btn" data-tab="addItemTab">Add Item</button>
+          <button class="tab-btn" data-tab="itemsTab">Items</button>
+          <button class="tab-btn" data-tab="settingsTab">Settings</button>
+          <button class="tab-btn" data-tab="invoiceTab">Template</button>
+          <button class="tab-btn glow-blue" id="siteEditorBtn">Site Editor</button>
+          <button class="tab-btn danger" id="adminLogoutBtn">Logout</button>
+        </div>
+
+        <div id="ordersTab" class="tab glass-card">
+          <div class="orders-toolbar styled-bar">
+            <input type="text" id="orderSearch" placeholder="Search orders...">
+            <select id="orderStatusFilter">
+              <option value="">All Statuses</option>
+              <option>Pending</option>
+              <option>Confirmed</option>
+              <option>Ready</option>
+              <option>Delivered</option>
+              <option>Cancelled</option>
+            </select>
+            <button id="exportOrdersBtn" class="btn secondary">Export CSV</button>
+          </div>
+          <div id="ordersList"></div>
+          <div id="noOrders" class="muted">No orders yet.</div>
+        </div>
+
+        <div id="addItemTab" class="tab glass-card hidden">
+          <h3>Add New Product</h3>
+          <form id="addItemForm" class="form">
+            <div class="row">
+              <div class="field"><label>Name</label><input type="text" id="itemName" required></div>
+              <div class="field"><label>Category</label><input type="text" id="itemCategory" required></div>
+            </div>
+            <div class="row">
+              <div class="field"><label>Price</label><input type="number" id="itemPrice" required></div>
+              <div class="field"><label>Stock</label><input type="number" id="itemStock" required></div>
+            </div>
+            <div class="row">
+              <div class="field"><label>GST %</label><input type="number" id="itemGst" value="12"></div>
+              <div class="field"><label>HSN</label><input type="text" id="itemHsn"></div>
+            </div>
+            <div class="row">
+                <div class="field"><label>Pack</label><input type="text" id="itemPack"></div>
+                <div class="field"><label>SKU</label><input type="text" id="itemSku"></div>
+            </div>
+            <div class="field"><label>Description</label><textarea id="itemDesc"></textarea></div>
+            <div class="field"><label>Image</label><input type="file" id="itemImage"></div>
+            <button class="btn primary" type="submit">Add Item</button>
+          </form>
+          <div id="addItemMsg" class="success hidden"></div>
+        </div>
+
+        <div id="itemsTab" class="tab glass-card hidden">
+           <div class="items-toolbar styled-bar">
+            <button id="exportItemsBtn" class="btn secondary">Export Items</button>
+          </div>
+          <div id="itemsList"></div>
+          <div id="noItems" class="muted hidden">No items yet.</div>
+        </div>
+
+        <div id="settingsTab" class="tab glass-card hidden">
+          <h3>Settings</h3>
+          <form id="settingsForm" class="form">
+             <div class="row"><div class="field"><label>Name</label><input type="text" id="setName"></div><div class="field"><label>Symbol</label><input type="text" id="setCurrency"></div></div>
+             <div class="row"><div class="field"><label>Phone</label><input type="text" id="setPhone"></div><div class="field"><label>Email</label><input type="email" id="setEmail"></div></div>
+             <div class="row"><div class="field"><label>GSTIN</label><input type="text" id="setGstin"></div><div class="field"><label>Hours</label><input type="text" id="setHours"></div></div>
+             <div class="field"><label>Address</label><input type="text" id="setAddress"></div>
+             <div class="row"><div class="field"><label>City</label><input type="text" id="setCity"></div><div class="field"><label>Pin</label><input type="text" id="setPincode"></div></div>
+             <div class="row"><div class="field"><label>Delivery</label><select id="setDelivery"><option value="yes">Yes</option><option value="no">No</option></select></div><div class="field"><label>Ship Fee</label><input type="number" id="setShipFee"></div></div>
+             <div class="field"><label>Map URL</label><input type="text" id="setMap"></div>
+             <div class="field"><label>Logo</label><input type="file" id="setLogo"></div>
+             <div class="field"><label>Admin PIN</label><input type="password" id="setPin"></div>
+             <button class="btn primary">Save</button>
+          </form>
+          <div id="settingsMsg" class="success hidden"></div>
+        </div>
+
+        <div id="invoiceTab" class="tab glass-card hidden">
+           <h3>Invoice Template</h3>
+           <form id="invoiceForm" class="form">
+             <div class="row"><div class="field"><label>Prefix</label><input type="text" id="invPrefix"></div><div class="field"><label>Next No</label><input type="number" id="invNext"></div></div>
+             <div class="row"><div class="field"><label>Split GST</label><select id="invSplit"><option value="no">No</option><option value="yes">Yes</option></select></div><div class="field"><label>Sign Block</label><select id="invSign"><option value="yes">Yes</option><option value="no">No</option></select></div></div>
+             
+             <!-- NEW: Invoice Header Upload -->
+             <div class="field">
+                <label>Upload Custom Invoice Header Image</label>
+                <input type="file" id="invHeaderImg">
+                <small class="muted">This will replace the text header on printouts.</small>
+             </div>
+
+             <div class="field"><label>Bank Details</label><textarea id="invBank"></textarea></div>
+             <div class="field"><label>Terms</label><textarea id="invTerms"></textarea></div>
+             <button class="btn primary">Save Template</button>
+           </form>
+           <div id="invoiceMsg" class="success hidden"></div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Editor Controls -->
+    <div id="editorControls" class="hidden glass-panel">
+        <div class="editor-group">
+          <label>Main Color</label>
+          <input type="color" id="themePrimaryVal" value="#06b6d4">
+        </div>
+        <div class="editor-group">
+          <label>Background</label>
+          <input type="color" id="themeBgVal" value="#f0f9ff">
+        </div>
+        <div class="editor-actions">
+          <button id="saveEditorBtn" class="btn primary small">Save All</button>
+          <button id="cancelEditorBtn" class="btn danger small">Exit</button>
+        </div>
+    </div>
+
+  </main>
+
+  <nav class="bottom-nav glass-panel" aria-label="Primary">
+    <a href="#" data-section="home" class="bn-link active"><span class="bn-ic">🏠</span><span class="bn-t">Home</span></a>
+    <a href="#" data-section="products" class="bn-link"><span class="bn-ic">📦</span><span class="bn-t">Products</span></a>
+    <a href="#" data-section="cart" class="bn-link"><span class="bn-ic">🛒</span><span class="bn-t">Cart</span><span id="bnCartCount" class="pill bn-pill">0</span></a>
+    <a href="#" data-section="adminPanel" class="bn-link admin-only hidden" id="bnAdminNav"><span class="bn-ic">⚙️</span><span class="bn-t">Admin</span></a>
+  </nav>
+
+  <footer class="site-footer">
+    <div class="container">
+      <strong id="footName">MedWholesale</strong> — <span id="footHours"></span><br>
+      <span id="footAddress"></span> | <span id="footPhone"></span> | GSTIN: <span id="footGstin"></span>
+    </div>
+  </footer>
+</body>
+</html>
