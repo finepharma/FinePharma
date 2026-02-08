@@ -1,60 +1,55 @@
 /**
  * Auth Context - Global Authentication State Management
  * FinePharma Wholesale
- * 
- * Provides global auth state and functions to all components.
- * Handles auth state persistence, role verification, and session management.
  */
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { subscribeToAuth, logoutUser, getRoleBasedRedirect } from '../services/authService';
 import { getUserById } from '../services/userService';
 
-// Create Auth Context
 const AuthContext = createContext(null);
 
-/**
- * Auth Provider Component
- * Wraps the app to provide auth state globally
- */
 export const AuthProvider = ({ children }) => {
+
   const [authState, setAuthState] = useState({
-    user: null,           // Firebase user object
-    userData: null,       // Firestore user data (includes role)
+    user: null,
+    userData: null,
     isAuthenticated: false,
-    isLoading: true,      // Initial auth check in progress
+    isLoading: true,
     error: null
   });
 
-  /**
-   * Refresh user data from Firestore
-   * Used to ensure role is always up-to-date
-   */
+  // ---------- SAFE USER DATA REFRESH ----------
   const refreshUserData = useCallback(async () => {
-    if (authState.user?.uid) {
-      try {
-        const freshUserData = await getUserById(authState.user.uid);
-        if (freshUserData) {
-          setAuthState(prev => ({
-            ...prev,
-            userData: freshUserData,
-            isAuthenticated: freshUserData.status === 'active'
-          }));
-          return freshUserData;
-        }
-      } catch (error) {
-        console.error('Error refreshing user data:', error);
+    if (!authState.user?.uid) return null;
+
+    try {
+      const freshUserData = await getUserById(authState.user.uid);
+
+      if (!freshUserData) {
+        console.error("User doc missing in Firestore");
+        return null;
       }
+
+      setAuthState(prev => ({
+        ...prev,
+        userData: freshUserData,
+        isAuthenticated: freshUserData.status === 'active'
+      }));
+
+      return freshUserData;
+
+    } catch (err) {
+      console.error("refreshUserData crash:", err);
+      return null;
     }
-    return null;
   }, [authState.user]);
 
-  /**
-   * Handle logout
-   */
+  // ---------- LOGOUT ----------
   const logout = useCallback(async () => {
     try {
       await logoutUser();
+
       setAuthState({
         user: null,
         userData: null,
@@ -62,80 +57,129 @@ export const AuthProvider = ({ children }) => {
         isLoading: false,
         error: null
       });
+
       return true;
-    } catch (error) {
+
+    } catch (err) {
+      console.error("Logout failed:", err);
+
       setAuthState(prev => ({
         ...prev,
-        error: error.message
+        error: err.message
       }));
+
       return false;
     }
   }, []);
 
-  /**
-   * Clear any auth errors
-   */
   const clearError = useCallback(() => {
-    setAuthState(prev => ({
-      ...prev,
-      error: null
-    }));
+    setAuthState(prev => ({ ...prev, error: null }));
   }, []);
 
-  /**
-   * Subscribe to Firebase Auth state on mount
-   */
+  // ---------- AUTH LISTENER ----------
   useEffect(() => {
-    console.log('AuthProvider: Setting up auth listener');
-    
-    const unsubscribe = subscribeToAuth(async (authData) => {
-      if (authData) {
-        const { firebaseUser, userData } = authData;
-        
-        // Check if user account is active
-        if (userData && userData.status !== 'active') {
-          console.log('AuthProvider: User account disabled, logging out');
-          await logoutUser();
+    console.log("AuthProvider mounted");
+
+    // 🔥 Fail-safe timeout — prevents infinite spinner
+    const failSafe = setTimeout(() => {
+      setAuthState(prev => ({
+        ...prev,
+        isLoading: false
+      }));
+      console.warn("Auth timeout fallback triggered");
+    }, 7000);
+
+    let unsubscribe = () => {};
+
+    try {
+      unsubscribe = subscribeToAuth(async (authData) => {
+        try {
+
+          if (!authData) {
+            setAuthState({
+              user: null,
+              userData: null,
+              isAuthenticated: false,
+              isLoading: false,
+              error: null
+            });
+            return;
+          }
+
+          const { firebaseUser, userData } = authData;
+
+          // user exists but firestore doc missing
+          if (!userData) {
+            console.error("Firestore user doc not found");
+
+            setAuthState({
+              user: firebaseUser,
+              userData: null,
+              isAuthenticated: false,
+              isLoading: false,
+              error: "User profile missing. Contact admin."
+            });
+            return;
+          }
+
+          // disabled user
+          if (userData.status !== 'active') {
+            await logoutUser();
+
+            setAuthState({
+              user: null,
+              userData: null,
+              isAuthenticated: false,
+              isLoading: false,
+              error: "Account disabled"
+            });
+            return;
+          }
+
+          setAuthState({
+            user: firebaseUser,
+            userData,
+            isAuthenticated: true,
+            isLoading: false,
+            error: null
+          });
+
+        } catch (innerErr) {
+          console.error("Auth callback crash:", innerErr);
+
           setAuthState({
             user: null,
             userData: null,
             isAuthenticated: false,
             isLoading: false,
-            error: 'Your account has been disabled. Please contact support.'
+            error: "Auth processing error"
           });
-          return;
         }
-        
-        setAuthState({
-          user: firebaseUser,
-          userData,
-          isAuthenticated: !!userData && userData.status === 'active',
-          isLoading: false,
-          error: null
-        });
-      } else {
-        setAuthState({
-          user: null,
-          userData: null,
-          isAuthenticated: false,
-          isLoading: false,
-          error: null
-        });
-      }
-    });
+      });
 
-    // Cleanup subscription on unmount
+    } catch (outerErr) {
+      console.error("subscribeToAuth crash:", outerErr);
+
+      setAuthState({
+        user: null,
+        userData: null,
+        isAuthenticated: false,
+        isLoading: false,
+        error: "Auth listener failed"
+      });
+    }
+
     return () => {
-      console.log('AuthProvider: Cleaning up auth listener');
-      unsubscribe();
+      clearTimeout(failSafe);
+      if (unsubscribe) unsubscribe();
+      console.log("AuthProvider unmounted");
     };
+
   }, []);
 
-  // Context value
+  // ---------- CONTEXT VALUE ----------
   const value = {
     ...authState,
-    user: authState.user,
-    userData: authState.userData,
     role: authState.userData?.role || null,
     isAdmin: authState.userData?.role === 'admin',
     isStaff: authState.userData?.role === 'staff',
@@ -153,15 +197,10 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-/**
- * Custom hook to use auth context
- * @returns {Object} Auth context value
- */
+// ---------- HOOK ----------
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
+  if (!context) throw new Error("useAuth must be used within AuthProvider");
   return context;
 };
 
